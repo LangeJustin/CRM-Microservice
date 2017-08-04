@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: javax.jdo:jdo-api:3.0.1">
+    <CLASSES>
+      <root url="jar://C:/Z/caches/modules-2/files-2.1/javax.jdo/jdo-api/3.0.1/58e7a538e020b73871e232eeb064835fd98a492/jdo-api-3.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://C:/Z/caches/modules-2/files-2.1/javax.jdo/jdo-api/3.0.1/9e037777f20865a96c79ce50a60967b2d60d4c31/jdo-api-3.0.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://C:/Z/caches/modules-2/files-2.1/javax.jdo/jdo-api/3.0.1/1bb91e3f83af904aa1c82fa83095b44245552d8e/jdo-api-3.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

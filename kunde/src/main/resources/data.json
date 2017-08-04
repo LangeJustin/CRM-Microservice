@@ -1,0 +1,189 @@
+[
+    {
+        "_class": "de.hska.kunde.entity.Kunde",
+        "id": "000000000000000000000000",
+        "nachname": "Admin",
+        "email": "admin@hska.de",
+        "newsletter": true,
+        "geburtsdatum": [
+            2016,
+            1,
+            31
+        ],
+        "umsatz": {
+            "betrag": 0,
+            "waehrung": "EUR"
+        },
+        "homepage": "https://www.hska.de",
+        "geschlecht": "W",
+        "familienstand": "VH",
+        "interessen": [
+            "L"
+        ],
+        "adresse": {
+            "plz": "76133",
+            "ort": "Karlsruhe"
+        },
+        "username": "admin"
+    },
+    {
+        "_class": "de.hska.kunde.entity.Kunde",
+        "id": "000000000000000000000001",
+        "nachname": "Alpha",
+        "email": "alpha@hska.edu",
+        "newsletter": true,
+        "geburtsdatum": [
+            2016,
+            1,
+            1
+        ],
+        "umsatz": {
+            "betrag": 10,
+            "waehrung": "USD"
+        },
+        "homepage": "https://www.hska.edu",
+        "geschlecht": "M",
+        "familienstand": "L",
+        "interessen": ["S", "L"],
+        "adresse": {
+            "plz": "76133",
+            "ort": "Karlsruhe"
+        },
+        "username": "alpha1"
+    },
+    {
+        "_class": "de.hska.kunde.entity.Kunde",
+        "id": "000000000000000000000002",
+        "nachname": "Alpha",
+        "email": "alpha@hska.ch",
+        "newsletter": true,
+        "geburtsdatum": [
+            2016,
+            1,
+            2
+        ],
+        "umsatz": {
+            "betrag": 20,
+            "waehrung": "CHF"
+        },
+        "homepage": "https://www.hska.ch",
+        "geschlecht": "W",
+        "familienstand": "G",
+        "interessen": ["S", "R"],
+        "adresse": {
+            "plz": "76133",
+            "ort": "Karlsruhe"
+        },
+        "username": "alpha2"
+    },
+    {
+        "_class": "de.hska.kunde.entity.Kunde",
+        "id": "000000000000000000000003",
+        "nachname": "Alpha",
+        "email": "alpha@hska.uk",
+        "newsletter": true,
+        "geburtsdatum": [
+            2016,
+            1,
+            3
+        ],
+        "umsatz": {
+            "betrag": 30,
+            "waehrung": "GBP"
+        },
+        "homepage": "https://www.hska.uk",
+        "geschlecht": "M",
+        "familienstand": "VW",
+        "interessen": ["L", "R"],
+        "adresse": {
+            "plz": "76133",
+            "ort": "Karlsruhe"
+        },
+        "username": "alpha3"
+    },
+    {
+        "_class": "de.hska.kunde.entity.Kunde",
+        "id": "000000000000000000000004",
+        "nachname": "Delta",
+        "email": "delta@hska.jp",
+        "newsletter": true,
+        "geburtsdatum": [
+            2016,
+            1,
+            4
+        ],
+        "umsatz": {
+            "betrag": 40,
+            "waehrung": "JPY"
+        },
+        "homepage": "https://www.hska.jp",
+        "geschlecht": "W",
+        "familienstand": "VH",
+        "adresse": {
+            "plz": "76133",
+            "ort": "Karlsruhe"
+        },
+        "username": "delta"
+    },
+    {
+        "_class": "de.hska.kunde.entity.Kunde",
+        "id": "000000000000000000000005",
+        "nachname": "Epsilon",
+        "email": "epsilon@hska.cn",
+        "newsletter": true,
+        "geburtsdatum": [
+            2016,
+            1,
+            5
+        ],
+        "geschlecht": "M",
+        "familienstand": "L",
+        "adresse": {
+            "plz": "76133",
+            "ort": "Karlsruhe"
+        },
+        "username": "epsilon"
+    },
+    {
+        "_class": "de.hska.kunde.config.security.Account",
+        "id": "100000000000000000000000",
+        "username": "admin",
+        "password": "$2a$09$BACOR7c6w0Y0OLwsr1yKje0EY8PAgCllJTrD2Y93WGP1nldRfHlHW",
+        "authorities": ["ROLE_ADMIN", "ROLE_KUNDE", "ROLE_ACTUATOR"]
+    },
+    {
+        "_class": "de.hska.kunde.config.security.Account",
+        "id": "100000000000000000000001",
+        "username": "alpha1",
+        "password": "$2a$09$BACOR7c6w0Y0OLwsr1yKje0EY8PAgCllJTrD2Y93WGP1nldRfHlHW",
+        "authorities": ["ROLE_KUNDE"]
+    },
+    {
+        "_class": "de.hska.kunde.config.security.Account",
+        "id": "100000000000000000000002",
+        "username": "alpha2",
+        "password": "$2a$09$BACOR7c6w0Y0OLwsr1yKje0EY8PAgCllJTrD2Y93WGP1nldRfHlHW",
+        "authorities": ["ROLE_KUNDE"]
+    },
+    {
+        "_class": "de.hska.kunde.config.security.Account",
+        "id": "100000000000000000000003",
+        "username": "alpha3",
+        "password": "$2a$09$BACOR7c6w0Y0OLwsr1yKje0EY8PAgCllJTrD2Y93WGP1nldRfHlHW",
+        "authorities": ["ROLE_KUNDE"]
+    },
+    {
+        "_class": "de.hska.kunde.config.security.Account",
+        "id": "100000000000000000000004",
+        "username": "delta",
+        "password": "$2a$09$BACOR7c6w0Y0OLwsr1yKje0EY8PAgCllJTrD2Y93WGP1nldRfHlHW",
+        "authorities": ["ROLE_KUNDE"]
+    },
+    {
+        "_class": "de.hska.kunde.config.security.Account",
+        "id": "100000000000000000000004",
+        "username": "epsilon",
+        "password": "$2a$09$BACOR7c6w0Y0OLwsr1yKje0EY8PAgCllJTrD2Y93WGP1nldRfHlHW",
+        "authorities": ["ROLE_KUNDE"]
+    }
+]

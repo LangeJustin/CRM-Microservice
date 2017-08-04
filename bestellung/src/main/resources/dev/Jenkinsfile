@@ -1,0 +1,85 @@
+#!groovy
+pipeline {
+    agent any
+
+    //options {
+    //    buildDiscarder(logRotator(numToKeepStr: '10'))
+    //}
+
+    stages {
+        // Stage: zur Visualisierung eines bestimmten Abschnitts
+        stage('Init') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        error 'Unix-Varianten werden nicht unterstuetzt'
+                    }
+                }
+                echo "Running ${env.JOB_NAME} #${env.BUILD_ID}"
+                deleteDir()
+            }
+        }
+        stage('Compile') {
+            steps {
+                // Benannte Argumente statt Funktionsaufruf mit Klammern
+                git url: 'file:///C:/Zimmermann/jenkins-git-upstream/kunde', branch: 'master', poll: true
+                // Kurzform fuer: bat([script: '...'])
+                bat './gradlew clean compileTestJava'
+            }
+        }
+        stage('Test, Build und Codeanalyse') {
+            steps {
+                parallel(
+                    'Test': {
+                        bat './gradlew test'
+                    },
+                    'Archiv': {
+                        bat './gradlew assemble'
+                    },
+                    'Codeanalyse': {
+                        bat './gradlew check -x junitPlatformTest'
+                    },
+                    // 'OWASP': {
+                    //     bat './gradlew dependencyCheck'
+                    // },
+                    'Javadoc': {
+                        bat './gradlew javadoc'
+                        // javadocArchiver javadocDir: 'build/docs/javadoc'
+                        step([$class: 'JavadocArchiver', javadocDir: 'build/docs/javadoc'])
+                    }
+                )
+            }
+            post {
+                always {
+                    junit 'build/test-results/junit-platform/TEST-junit-jupiter.xml'
+                    warnings consoleParsers: [[
+                        parserName: 'Java Compiler (javac)',
+                        pattern: '**/*.java'
+                    ]]
+                    checkstyle pattern: 'build/reports/checkstyle/main.xml'
+                    findbugs pattern: 'build/reports/findbugs/main.xml'
+                    pmd pattern: 'build/reports/pmd/main.xml'
+                    // publishHTML target: [
+                    //     allowMissing: false,
+                    //     alwaysLinkToLastBuild: false,
+                    //     keepAll: true,
+                    //     reportDir: 'build/reports',
+                    //     reportFiles: 'dependency-check-report.html',
+                    //     reportName: 'OWASP Report'
+                    // ]
+                }
+                success {
+                    archive 'build/libs/kunde.jar'
+                    publishHTML target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'build/reports/jacoco/junitPlatformJacocoReport/html',
+                        reportFiles: 'index.html',
+                        reportName: 'JaCoCo Report'
+                    ]
+                }
+            }
+        }
+    }
+}

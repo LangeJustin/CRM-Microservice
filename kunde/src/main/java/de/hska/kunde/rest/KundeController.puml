@@ -1,0 +1,110 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam componentStyle uml2
+
+' !pragma horizontalLineBetweenDifferentPackageAllowed
+
+package javax.validation {
+    interface Validator {
+    }
+}
+
+package org.bson.types {
+    class ObjectId {
+    }
+}
+
+package com.querydsl.core.types {
+    interface Predicate {
+    }
+}
+
+package org.springframework {
+    package http {
+        class HttpEntity<T> {
+        }
+    }
+
+    package hateoas.mvc {
+        abstract class ResourceAssemblerSupport {
+        }
+    }
+
+    package web.multipart {
+        interface MultipartFile {
+        }
+    }
+
+    package security.core {
+        interface Authentication {
+        }
+    }
+
+}
+
+package de.hska.kunde {
+    package entity {
+        class Kunde << entity >> {
+        }
+    }
+
+    package service {
+        class KundeService << service >> {
+        }
+    }
+
+    package rest #DDDDDD {
+        AbstractResourceAssembler -down-|> ResourceAssemblerSupport
+        KundeResourceAssembler -right-|> AbstractResourceAssembler
+        KundeController *-down-> "1" KundeService
+        KundeController .down.> KundeResource
+        KundeController .down.> Kunde
+        KundeController .up.> ObjectId
+        KundeController .up.> Predicate
+        KundeController ..> HttpEntity
+        KundeController ..> Authentication
+        KundeController ..> MultipartFile
+        KundeController *-down-> "1" Validator
+        KundeController *-down-> "1" KundeResourceAssembler
+
+        ' [hidden] fuer nicht-existierende Beziehungen als Workaround fuer das Layout
+        KundeController -[hidden]-> KundeResource
+        KundeResourceAssembler -[hidden]-> KundeService
+        AbstractResourceAssembler -[hidden]-> Kunde
+        KundeService -[hidden]> ResourceAssemblerSupport
+        KundeService -[hidden]> Validator
+        ResourceAssemblerSupport -[hidden]> HttpEntity
+        ResourceAssemblerSupport -[hidden]> MultipartFile
+        ResourceAssemblerSupport -[hidden]> Authentication
+        Validator -[hidden]> ObjectId
+        Validator -[hidden]> Predicate
+
+        abstract class AbstractResourceAssembler {
+        }
+
+        class KundeResourceAssembler {
+        }
+
+        class KundeResource << entity >> {
+        }
+
+        class KundeController << boundary >> << @RestController >> << @RequestMapping("/kunde") >> {
+            + @GetMapping("/{id}") findById(@PathVariable id: ObjectId, @RequestHeader(value = IF_NONE_MATCH) Optional<String> versionHeader): HttpEntity<KundeResource>
+            + @GetMapping find(@QuerydslPredicate(root = Kunde.class) predicate: Predicate): List<KundeResource>
+            + @GetMapping("/{id}/media") download(@PathVariable id: ObjectId): HttpEntity<InputStreamResource>
+            + @PostMapping save(@RequestBody @Valid kunde: Kunde): HttpEntity<Void>
+            + @PutMapping update(@RequestBody kunde: Kunde, @RequestHeader(value = IF_MATCH) version: String): HttpEntity<Void>
+            + @PatchMapping(path = "/{id}", consumes = "application/json-patch+json") update(@PathVariable id: ObjectId, @RequestBody operations: Collection<PatchOperation>, @RequestHeader(value = IF_MATCH) version: String): HttpEntity<Object>
+            + @PutMapping("/{id}") upload(@PathVariable id: ObjectId, @RequestParam file: MultipartFile)
+            + @DeleteMapping("/{id}") @ResponseStatus(NO_CONTENT) delete(@PathVariable id: ObjectId, authentication: Authentication)
+        }
+    }
+}
+
+hide empty members
+hide empty methods
+hide empty fields
+
+footer (c) Juergen Zimmermann
+
+@enduml

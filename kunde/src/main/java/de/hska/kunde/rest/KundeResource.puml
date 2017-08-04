@@ -1,0 +1,71 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam componentStyle uml2
+
+package org.springframework.hateoas {
+    class ResourceSupport {
+    }
+}
+
+package de.hska.kunde {
+    package entity {
+        class Kunde << @Document >> {
+        }
+
+        class Umsatz << @Data >> {
+            - betrag: BigDecimal
+            - waehrung: Currency
+        }
+
+        class Adresse << @Data >> {
+            - plz: String
+            - ort: String
+        }
+
+        enum GeschlechtType {
+            MAENNLICH
+            WEIBLICH
+        }
+
+        enum FamilienstandType {
+            LEDIG
+            VERHEIRATET
+            GESCHIEDEN
+            VERWITWET
+        }
+
+        enum InteresseType {
+            SPORT
+            LESEN
+            REISEN
+        }
+    }
+
+    package rest #DDDDDD {
+        Kunde <.. KundeResource
+        ResourceSupport <|-down- KundeResource
+        KundeResource *-down-> "1" Umsatz
+        KundeResource *-down-> "1" Adresse
+        KundeResource *-down-> "1" GeschlechtType
+        KundeResource *-down-> "1" FamilienstandType
+        KundeResource *-down-> "*" InteresseType
+
+        class KundeResource << entity >> << @Getter >> << @Setter >> << @EqualsAndHashCode(of = "email", callSuper = false) >> << @ToString(callSuper = true) >> << @NoArgsConstructor >> << @AllArgsConstructor >> << @Builder >> {
+            - nachname : String
+            - email : String
+            - newsletter : boolean
+            - geburtsdatum: LocalDate
+            - homepage: URL
+            - username: String
+            ~ {static} of(kunde: Kunde): KundeResource
+        }
+    }
+}
+
+hide empty members
+hide empty methods
+hide empty fields
+
+footer (c) Juergen Zimmermann
+
+@enduml

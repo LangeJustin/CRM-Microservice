@@ -1,0 +1,96 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam componentStyle uml2
+
+package org.bson.types {
+    class ObjectId {
+    }
+}
+
+package com.querydsl.core.types {
+    interface Predicate {
+    }
+}
+
+package org.springframework {
+    package security.core {
+        interface Authentication {
+        }
+    }
+
+    package data {
+        package repository {
+            interface CrudRepository {
+            }
+        }
+
+        package querydsl {
+            package binding {
+                interface QuerydslBinderCustomizer {
+                }
+            }
+
+            interface QueryDslPredicateExecutor {
+            }
+        }
+
+        package mongodb.gridfs {
+            class GridFsTemplate {
+            }
+        }
+    }
+
+    package context {
+        interface ApplicationEventPublisher {
+        }
+    }
+}
+
+package de.hska.kunde {
+    package config.security {
+        class AuthService << control >> {
+        }
+    }
+
+    package entity {
+        class Kunde << entity >> {
+        }
+    }
+
+    package service #DDDDDD {
+        KundeRepository .down.|> CrudRepository
+        KundeRepository .down.|> QueryDslPredicateExecutor
+        KundeRepository .down.|> QuerydslBinderCustomizer
+        KundeService -down-> "1" KundeRepository
+        KundeService -down-> "1" AuthService
+        KundeService -down-> "1" ApplicationEventPublisher
+        KundeService -down-> "1" GridFsTemplate
+        KundeService ..> Kunde
+        KundeService ..> ObjectId
+        KundeService ..> Predicate
+        KundeService ..> Authentication
+
+        interface KundeRepository {
+        }
+
+        class KundeService << control >> << @Service >> << @CacheConfig >> {
+            + findAll(): Stream<Kunde>
+            + @Cacheable(key = "#id") findById(id: ObjectId): Optional<Kunde>
+            + find(email: String, nachname: String, plz: String): Stream<Kunde>
+            + find(predicate: Predicate): Stream<Kunde>
+            + findMedia(id: ObjectId): Optional<GridFsResource>
+            + save(kunde: Kunde): Kunde
+            + save(inputStream: InputStream, id: ObjectId, contentType: String): Optional<Object>
+            + @CachePut(key = "#kunde.id") update(kunde: Kunde, versionStr: String): Optional<Kunde>
+            + @CacheEvict(key = "#id") delete(id: ObjectId, authentication: Authentication): boolean
+        }
+    }
+}
+
+hide empty members
+hide empty methods
+hide empty fields
+
+footer (c) Juergen Zimmermann
+
+@enduml

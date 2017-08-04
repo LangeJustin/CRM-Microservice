@@ -1,0 +1,53 @@
+@startuml
+
+skinparam componentStyle uml2
+
+left to right direction
+
+package de.shop.kunde #DDDDDD {
+    package rest <<boundary>> #FFFFFF {
+        [KundeController]
+    }
+
+    package service <<control>> #FFFFFF {
+        [KundeService]
+        [KundeRepository]
+    }
+
+    package entity <<entity>> #FFFFFF {
+        [Kunde]
+    }
+}
+
+cloud {
+    [Spring Data MongoDB]
+}
+
+database "hskadb (MongoDB)" {
+    [Collection kunde]
+}
+
+cloud {
+    [Spring Mail]
+}
+
+node {
+    [Mailserver]
+}
+
+RESTClient ..> [KundeController]
+[KundeController] .right.> [Kunde]
+[KundeController] --> [KundeService]
+[KundeService] .up.> [Kunde]
+[KundeService] -right-> [KundeRepository]
+[KundeRepository] .right.> [Spring Data MongoDB]
+[KundeService] .right.> [Spring Mail]
+[Spring Data MongoDB] ..> [Collection kunde]
+[Spring Mail] ..> [Mailserver]
+
+' [hidden] fuer nicht-existierende Beziehungen als Workaround fuer das Layout
+[KundeController] -[hidden]-> [Kunde]
+
+footer (c) Juergen Zimmermann
+
+@enduml

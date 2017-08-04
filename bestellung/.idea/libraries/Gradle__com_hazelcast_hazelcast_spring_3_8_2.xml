@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.hazelcast:hazelcast-spring:3.8.2">
+    <CLASSES>
+      <root url="jar://C:/Z/caches/modules-2/files-2.1/com.hazelcast/hazelcast-spring/3.8.2/460fd766a9119c32ca575ea7d442863c9a4ff5f2/hazelcast-spring-3.8.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://C:/Z/caches/modules-2/files-2.1/com.hazelcast/hazelcast-spring/3.8.2/1a4ec928bb180db01271890a07adfcbb8c07c102/hazelcast-spring-3.8.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://C:/Z/caches/modules-2/files-2.1/com.hazelcast/hazelcast-spring/3.8.2/c6e18b1cb94bb9af6193e7d446cdc23da99d8406/hazelcast-spring-3.8.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

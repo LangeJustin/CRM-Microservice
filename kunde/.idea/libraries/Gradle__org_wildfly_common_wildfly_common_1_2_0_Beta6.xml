@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.wildfly.common:wildfly-common:1.2.0.Beta6">
+    <CLASSES>
+      <root url="jar://C:/Z/caches/modules-2/files-2.1/org.wildfly.common/wildfly-common/1.2.0.Beta6/45effeb835ba95959a11366edfc4e3b6de095732/wildfly-common-1.2.0.Beta6.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://C:/Z/caches/modules-2/files-2.1/org.wildfly.common/wildfly-common/1.2.0.Beta6/c16ac2a2a2b12f3ac53e543dd6ece2a3170f3420/wildfly-common-1.2.0.Beta6-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://C:/Z/caches/modules-2/files-2.1/org.wildfly.common/wildfly-common/1.2.0.Beta6/9d932eddbb3a75dde8bcd296f722d7f78e642f6f/wildfly-common-1.2.0.Beta6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,165 @@
+/*
+ *
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// Aufruf:   gradlew [mailserver]
+
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://plugins.gradle.org/m2'
+        }
+    }
+    // dependencies {
+    //     // https://github.com/johnrengelman/shadow
+    //     classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+    // }
+}
+
+plugins {
+    id 'java'
+    // https://github.com/danthegoodman/gradle-capsule-plugin
+    id 'us.kirchmeier.capsule' version '1.0.2'
+    id 'findbugs'
+    id 'checkstyle'
+    id 'pmd'
+}
+
+defaultTasks 'mailserver'
+
+ext {
+    javaVersion = 1.8
+    slf4jVersion = '1.7.21'
+    javaxMailVersion = '1.5.6'
+    activationVersion = '1.1.1'
+    subethasmtpVersion = '3.1.7'
+
+    // https://github.com/puniverse/capsule
+    // https://github.com/johnrengelman/shadow
+    capsuleVersion = '1.0.3'
+
+    findbugsVersion = '3.0.1'
+    findbugsAnnotationsVersion = '3.0.1u2'
+    findbugsXml = false
+    checkstyleVersion = '7.6.1'
+    pmdVersion = '5.5.5'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile("org.slf4j:slf4j-api:$slf4jVersion",
+            "org.slf4j:slf4j-simple:$slf4jVersion",
+            "com.sun.mail:javax.mail:$javaxMailVersion",
+            "javax.activation:activation:$activationVersion",
+            "org.subethamail:subethasmtp:$subethasmtpVersion")
+
+    pmd "net.sourceforge.pmd:pmd-java8:$pmdVersion"
+}
+
+//noinspection GroovyUnusedAssignment
+sourceCompatibility = "$javaVersion"
+//noinspection GroovyUnusedAssignment
+targetCompatibility = "$javaVersion"
+
+compileJava {
+    options.encoding = 'UTF-8'
+}
+
+processResources {
+    excludes += ['dev']
+}
+
+task mailserver(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'de.hska.mailserver.Mailserver'
+}
+
+project.capsule.version = "$capsuleVersion"
+task fatCapsule(type: FatCapsule) {
+    applicationClass 'de.hska.mailserver.Mailserver'
+    baseName 'mailserver'
+    capsuleManifest {
+        minJavaVersion = '1.8.0'
+    }
+    manifest {
+        attributes 'Specification-Vendor': 'Provided by Juergen Zimmermann'
+        attributes 'Specification-Version': 'v1.0'
+    }
+}
+fatCapsule.doLast {
+    println ''
+    println "Die ausfuehrbare JAR-Datei \"${archivesBaseName}-capsule.jar\" ist im Unterverzeichnis build\\libs"
+    println 'Aufruf:'
+    println "          java -jar build/libs/${archivesBaseName}-capsule.jar"
+}
+jar {
+    manifest {
+        attributes 'Specification-Vendor': 'Provided by Juergen Zimmermann'
+        attributes 'Specification-Version': 'v1.0'
+    }
+}
+
+findbugs {
+    // sourceSets = [sourceSets.main]
+    excludeFilterConfig = resources.text.fromFile("$projectDir/src/main/resources/dev/findbugs.xml")
+    // excludeFilter = file("$projectDir/src/test/resources/findbugs.xml")
+    effort = "max"
+    ignoreFailures = false
+}
+findbugsMain.reports {
+    // FindBugs kann nur *1* Report produzieren
+    xml.enabled = findbugsXml
+    html.enabled = !findbugsXml
+}
+findbugsTest.reports {
+    xml.enabled = findbugsXml
+    html.enabled = !findbugsXml
+}
+
+checkstyle {
+    toolVersion = "$checkstyleVersion"
+    config = resources.text.fromFile("$projectDir/src/main/resources/dev/checkstyle.xml")
+    // configFile = file("$projectDir/src/test/resources/checkstyle.xml")
+    ignoreFailures = false
+}
+checkstyleMain.reports {
+    xml.enabled = true
+    html.enabled = true
+}
+checkstyleTest.reports {
+    xml.enabled = false
+    html.enabled = true
+}
+
+pmd {
+    sourceSets = [sourceSets.main, sourceSets.test]
+    // targetJdk = project.targetCompatibility
+    toolVersion = "$pmdVersion"
+    ruleSetConfig = resources.text.fromFile("$projectDir/src/main/resources/dev/pmd.xml")
+}
+
+task wrapper(type: Wrapper) {
+    println 'Wrapper: gradleVersion = 3.5-rc-2'
+
+    gradleVersion = '3.5-rc-2'
+    //noinspection UnnecessaryQualifiedReference
+    distributionType = Wrapper.DistributionType.ALL
+    // distributionUrl = 'https://services.gradle.org/distributions/gradle-3.5-rc-2-all.zip'
+}

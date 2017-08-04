@@ -1,0 +1,89 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam componentStyle uml2
+' skinparam monochrome true
+
+package org.springframework.hateoas {
+    interface Identifiable<ID extends Serializable> {
+        + getId(): ID
+    }
+}
+
+package org.bson.types {
+    class ObjectId {
+    }
+}
+
+package de.hska.kunde.entity #DDDDDD {
+    ObjectId <.. Kunde
+    Auditable <|-- Kunde
+    Identifiable <|.down. Kunde
+    Kunde *-down-> "1" Umsatz
+    Kunde *-down-> "1" Adresse
+    Kunde *-down-> "1" GeschlechtType
+    Kunde *-down-> "1" FamilienstandType
+    Kunde *-down-> "*" InteresseType
+    Kunde *-down-> "1" Account
+
+    class Auditable {
+        - @Version version: Integer
+        - @CreatedDate erzeugt: LocalDateTime
+        - @LastModifiedDate aktualisiert: LocalDateTime
+        # Auditable()
+    }
+
+    class Umsatz << @Data >> {
+        - betrag: BigDecimal
+        - waehrung: Currency
+    }
+
+    class Adresse << @Data >> {
+        - @NotNull @Pattern plz: String
+        - @NotNull ort: String
+    }
+
+    enum GeschlechtType {
+        MAENNLICH
+        WEIBLICH
+    }
+
+    enum FamilienstandType {
+        LEDIG
+        VERHEIRATET
+        GESCHIEDEN
+        VERWITWET
+    }
+
+    enum InteresseType {
+        SPORT
+        LESEN
+        REISEN
+    }
+
+    class Account << @Data >> {
+        - String username
+        - String password
+        - List<String> rollen
+    }
+
+    class Kunde << entity >> << @Document >> << @Getter >> << @Setter >> << @EqualsAndHashCode(of = "email", callSuper = false) >> << @ToString(callSuper = true) >> << @NoArgsConstructor >> << @AllArgsConstructor >> << @Builder >> {
+        - @Id @GeneratedValue id : ObjectId
+        - @NotNull @Pattern @Indexed nachname : String
+        - @NotNull @Email @Indexed email : String
+        - newsletter : boolean
+        - geburtsdatum: LocalDate
+        - homepage: URL
+        - @Indexed username: String
+    }
+}
+
+' [hidden] fuer nicht-existierende Beziehungen als Workaround fuer das Layout
+Identifiable .[hidden].> ObjectId
+
+hide empty members
+hide empty methods
+hide empty fields
+
+footer (c) Juergen Zimmermann
+
+@enduml

@@ -1,0 +1,850 @@
+/*
+ *
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+//  Aufrufe
+//  1) Microservice uebersetzen und starten
+//        gradlew -t
+//        gradlew compileJava
+//        gradlew compileTestJava
+//
+//  2) Microservice als selbstausfuehrendes JAR erstellen und ausfuehren
+//        gradlew assemble
+//        java -Xbootclasspath/p:alpn-boot.jar -jar build/libs/....jar --spring.profiles.active=dev
+//
+//  3) Tests und QS
+//        gradlew build
+//        gradlew -x junitPlatformTest build
+//        gradlew -x junitPlatformTest sonarqube
+//        gradlew test
+//        gradlew junitPlatformTest
+//
+//  4) Jenkins starten und beenden (in "Software Engineering")
+//        gradlew jenkins
+//        gradlew jenkinsstop
+//
+//  5) Sicherheitsueberpruefung durch OWASP Dependency Check
+//        gradlew dependencyCheck --info
+//
+//  6) RESTclient starten
+//        gradlew restclient
+//
+//  7) Dokumentation zum REST-API generieren
+//        gradlew enunciate
+//
+//  8) Projektreport erstellen
+//        gradlew projectReport
+//        gradlew dependencies
+//        gradlew dependencies --configuration runtimeOnly
+//        gradlew htmlDependencyReport
+//
+//  9) Neue Abhaengigkeiten ueberpruefen
+//        gradlew dependencyUpdates
+//        gradlew versions
+//
+//  10) Report ueber die Lizenzen der eingesetzten Fremdsoftware
+//        gradlew generateLicenseReport
+//
+//  11) javadoc erstellen
+//        gradlew javadoc
+//
+//  12) Properties auflisten
+//        gradlew properties
+//        gradlew dependencyManagementProperties
+//
+//  13) Verfuegbare Tasks auflisten
+//        gradlew tasks
+//
+//  14) Entwicklerhandbuch in "Software Engineering" erstellen
+//        gradlew asciidoctor
+//
+//  15) Daemon abfragen und stoppen
+//        gradlew --status
+//        gradlew --stop
+//
+//  16) Einmalige Initialisierung des Gradle Wrappers in der richtigen Version
+//      (dazu ist ggf. eine Internetverbindung erforderlich)
+//        gradle wrapper
+
+import static java.time.Year.now
+import static org.gradle.external.javadoc.JavadocMemberLevel.PRIVATE
+
+buildscript {
+    ext {
+        // springBootVersion = '1.5.2.RELEASE'
+        querydslPluginVersion = '1.0.8'
+        junitPlatformGradlePluginVersion = '1.0.0-M4'
+        asciidoctorjPdfVersion = '1.5.0-alpha.14'
+    }
+    repositories {
+        jcenter()
+        // mavenCentral()
+        maven {
+            url 'https://plugins.gradle.org/m2'
+        }
+        maven {
+            url 'http://repo.spring.io/libs-milestone'
+        }
+        maven {
+            url 'http://repo.spring.io/plugins-release'
+        }
+    }
+    dependencies {
+        classpath(// "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion",
+                  "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:$querydslPluginVersion",
+                  "org.junit.platform:junit-platform-gradle-plugin:$junitPlatformGradlePluginVersion",
+                  "org.asciidoctor:asciidoctorj-pdf:$asciidoctorjPdfVersion")
+    }
+}
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'jacoco'
+
+    id 'findbugs'
+    id 'checkstyle'
+    id 'pmd'
+    // http://redirect.sonarsource.com/doc/gradle.html
+    id 'org.sonarqube' version '2.3'
+
+    id 'org.springframework.boot' version '1.5.2.RELEASE'
+
+    id 'com.fizzpod.sweeney' version '2.1.2'
+
+    // https://github.com/franzbecker/gradle-lombok
+    // id 'io.franzbecker.gradle-lombok' version '1.8'
+
+    // https://github.com/ewerk/gradle-plugins/tree/master/querydsl-plugin
+    // http://bsideup.blogspot.de/2015/04/querydsl-with-gradle-and-idea.html
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.7'
+
+    id 'org.owasp.dependencycheck' version '1.4.5.1'
+
+    // 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.11'
+    id 'org.asciidoctor.convert' version '1.5.3'
+
+    // https://github.com/stoicflame/enunciate-gradle
+    id 'com.webcohesion.enunciate' version '2.8.1'
+
+    id 'project-report'
+
+    // https://github.com/ben-manes/gradle-versions-plugin
+    id 'com.github.ben-manes.versions' version '0.14.0'
+
+    // https://plugins.gradle.org/plugin/com.github.nwillc.vplugin
+    id "com.github.nwillc.vplugin" version "1.3.3"
+
+    // https://github.com/jk1/Gradle-License-Report
+    id 'com.github.jk1.dependency-license-report' version '0.3.10'
+}
+
+// apply plugin: 'org.springframework.boot'
+
+// AUSKOMMENTIEREN fuer JUnit 4
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+archivesBaseName = "$name"
+// group = "de.hska.$name"
+version = '1.0'
+
+defaultTasks 'bootRun'
+
+// ---------------------------------------------------------------------------------
+// P r o p e r t i e s   a u s   B O M - D a t e i e n   u e b e r s c h r e i b e n
+// ---------------------------------------------------------------------------------
+// siehe org.springframework.boot:spring-boot-dependencies :
+//ext['aspectj.version'] = '1.9.0.BETA-5'
+ext['aspectj.version'] = '1.8.10'
+ext['assertj.version'] = '3.6.2'
+ext['hazelcast.version'] = '3.8'
+// FIXME Spring 5.0 RC1 https://jira.spring.io/browse/SPR-13482
+//ext['hibernate-validator.version'] = '6.0.0.Alpha1'
+ext['hibernate-validator.version'] = '5.4.1.Final'
+ext['jackson.version'] = '2.9.0.pr2'
+//ext['javax-mail.version'] = '1.5.6'
+//ext['jetty.version'] = '9.4.2.v20170220'
+//ext['json-path.version'] = '2.2.0'
+//ext['junit.version'] = '4.12'
+ext['log4j2.version'] = '2.8.1'
+ext['lombok.version'] = '1.16.16'
+ext['mockito.version'] = '2.7.21'
+// ext['mongodb.version'] = '3.4.2'
+ext['querydsl.version'] = '4.1.4'
+ext['reactor.version'] = '3.0.5.RELEASE'
+//ext['reactor.version'] = '2.0.8.RELEASE'
+//ext['reactor-spring.version'] = '2.0.7.RELEASE'
+ext['slf4j.version'] = '1.7.24'
+//ext['spring.version'] = '5.0.0.M5'
+// FIXME Spring Cloud Netflix & Spring 5: https://github.com/spring-cloud/spring-cloud-netflix/issues/1377
+// NoSuchMethodError: org.springframework.core.annotation.AnnotationAttributes.getAliasedString(Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/String;
+// at org.springframework.cloud.netflix.feign.FeignClientsRegistrar.validate(FeignClientsRegistrar.java:202)
+ext['spring.version'] = '4.3.7.RELEASE'
+// http://tomcat.10.x6.nabble.com/Apache-Tomcat-9-0-0-M4-and-http-2-on-Mac-OS-X-10-11-4-td5048883.html
+// NoSuchMethodError: org.apache.catalina.Context.addServletMapping(Ljava/lang/String;Ljava/lang/String;)V
+//ext['tomcat.version'] = '9.0.0.M18'
+ext['tomcat.version'] = '8.5.13'
+// FIXME LinkedMultiValueMap wird bei TestRestTemplate *NICHT* uebertragen
+ext['undertow.version'] = '1.4.12.Final'
+
+// FIXME Spring Boot 2.0.0.M1 https://github.com/spring-projects/spring-boot/issues/7461
+//ext['spring-data-releasetrain.version'] = 'Kay-M1'
+ext['spring-data-releasetrain.version'] = 'Ingalls-SR1'
+//ext['spring-hateoas.version'] = '0.23.0.RELEASE'
+ext['spring-security.version'] = '4.2.2.RELEASE'
+//ext['spring-security-jwt.version'] = '1.0.7.RELEASE'
+//ext['spring-security-oauth.version'] = '2.0.13.RELEASE'
+
+// siehe org.springframework.cloud:spring-cloud-dependencies
+// und org.springframework.cloud:spring-cloud-netflix-dependencies :
+ext['spring-cloud.version'] = 'Dalston.CR1'
+ext['eureka.version'] = '1.6.2'
+//ext['feign.version'] = '9.4.0'
+ext['hystrix.version'] = '1.5.10'
+//ext['ribbon.version'] = '2.2.2'
+//ext['rxjava.version'] = '1.1.10'
+ext['rxjava.version'] = '1.2.9'
+
+// ---------------------------------------------------------------------------------
+// Properties fuer zusaetzliche ("external") Dependencies
+// ---------------------------------------------------------------------------------
+ext {
+    //noinspection GroovyAssignabilityCheck
+    javaVersion = 1.8
+
+    springCloudDependenciesVersion = 'Dalston.RC1'
+    springPlatformBomVersion = 'Brussels-SR1'
+    reactorBomVersion = 'Aluminium-SR1'
+
+    querydslVersion = '4.1.4'
+    mongodbVersion = '3.4.2'
+    mongodbDriverReactivestreamsVersion = '1.2.0'
+    xnioVersion = '3.5.0.Beta3'
+    alpnBootVersion = '8.1.11.v20170118'
+
+    junitJupiterVersion = '5.0.0-M4'
+    junitPlatformVersion = '1.0.0-M4'
+    antVersion = '1.10.1'
+    jacocoVersion = '0.7.9'
+
+    findbugsVersion = '3.0.1'
+    findbugsXml = false
+    checkstyleVersion = '7.6.1'
+    pmdVersion = '5.5.5'
+
+    springfoxSwaggerVersion = '2.6.1'
+
+    owaspAutoupdate = false
+
+    plantumlVersion = '8059'
+
+    restclientDir = 'C:/Zimmermann/restclient'
+    jenkinsDir = 'C:/Zimmermann/jenkins'
+}
+
+// http://mrhaki.blogspot.de/2016/03/gradle-goodness-source-sets-as-intellij.html
+sourceSets {
+    querydsl
+}
+
+configurations {
+    querydsl
+    findbugs
+    checkstyle
+    pmd
+
+    // http://stackoverflow.com/questions/39444908/how-to-create-an-html-report-for-junit-5-tests#answer-39455463
+    junitXmlToHtml
+
+    plantuml
+
+    depCheck
+
+    implementation.exclude module: 'spring-boot-starter-tomcat'
+    implementation.exclude module: 'spring-boot-starter-logging'
+
+    // spring-test mit JUnit 4 benoetigt hamcrest-core
+    testImplementation.exclude module: 'hamcrest-core'
+    testImplementation.exclude module: 'hamcrest-library'
+    testImplementation.exclude module: 'jsonassert'
+}
+
+//https://github.com/boxheed/gradle-sweeney-plugin
+sweeney {
+    enforce type: 'jdk', expect: "[$javaVersion,)"
+    enforce type: 'gradle', expect: '[3.4.1,)'
+    //noinspection GroovyAssignabilityCheck
+    validate()
+}
+
+repositories {
+    jcenter()
+    // mavenCentral()
+    maven {
+        url 'http://repo.spring.io/milestone'
+    }
+    maven {
+        url 'http://repo.spring.io/release'
+    }
+    // maven {
+    //     url 'http://repo.spring.io/libs-staging-local'
+    // }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudDependenciesVersion"
+        //https://github.com/spring-cloud/spring-cloud-release/blob/master/docs/src/main/asciidoc/spring-cloud-starters.adoc#using-spring-cloud-dependencies-with-spring-io-platform
+        mavenBom "io.spring.platform:platform-bom:$springPlatformBomVersion"
+        mavenBom "io.projectreactor:reactor-bom:$reactorBomVersion"
+
+        // mavenBom "org.apache.logging.log4j:log4j-bom:..."
+        // mavenBom "org.springframework.data:spring-data-releasetrain:..."
+        // mavenBom "org.springframework.security:spring-security-bom:..."
+    }
+}
+
+dependencies {
+    // Q-Klassen werden in build\classes\main generiert
+    querydsl("com.querydsl:querydsl-apt:$querydslVersion:general",
+             'org.hibernate:hibernate-validator-annotation-processor')
+
+    // fuer META-INF/additional-spring-configuration-metadata
+    // optional 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // implementation sourceSets.querydsl.output
+
+    // FIXME Gradle 3.4: compile -> implementation. com.ewerk.gradle.plugins.querydsl braucht noch compile
+    compile('org.projectlombok:lombok',  // nicht compileOnly wegen querydsl
+            'io.projectreactor:reactor-core',
+            // http://docs.spring.io/spring-boot/docs/current/reference/html/howto-logging.html
+            'org.springframework.boot:spring-boot-starter-log4j2',
+            'com.fasterxml.jackson.datatype:jackson-datatype-jsr310',
+            // fuer log4j2.yml
+            'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml',
+            "org.mongodb:mongodb-driver-async:$mongodbVersion",
+            // "org.mongodb:mongodb-driver-reactivestreams:$mongodbDriverReactivestreamsVersion",
+            'com.querydsl:querydsl-mongodb',
+            'com.hazelcast:hazelcast-spring',
+            // https://github.com/spring-projeccts/spring-boot/tree/master/spring-boot-starters
+            'org.springframework.cloud:spring-cloud-starter-config',
+            'org.springframework.cloud:spring-cloud-starter-eureka',
+            'org.springframework.cloud:spring-cloud-starter-hystrix',
+            'org.springframework.cloud:spring-cloud-starter-feign',
+            // 'org.springframework.cloud:spring-cloud-starter-oauth2'
+            'org.springframework.boot:spring-boot-starter-web',
+            "org.jboss.xnio:xnio-nio:$xnioVersion",
+            'org.springframework.boot:spring-boot-starter-undertow',
+            'org.springframework.boot:spring-boot-starter-data-mongodb',
+            // 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive',
+            // 'org.springframework.boot:spring-boot-starter-data-cassandra',
+            'org.springframework.boot:spring-boot-starter-hateoas',
+            'org.springframework.boot:spring-boot-starter-security',
+            'org.springframework.boot:spring-boot-starter-mail',
+            'org.springframework.boot:spring-boot-starter-cache',
+            'org.springframework.boot:spring-boot-starter-actuator',
+            'org.springframework.boot:spring-boot-actuator-docs',
+
+            "io.springfox:springfox-swagger2:$springfoxSwaggerVersion",
+            "io.springfox:springfox-swagger-ui:$springfoxSwaggerVersion")
+
+    compileOnly('org.springframework.boot:spring-boot-configuration-processor')
+
+    // http://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-devtools.html
+    // https://spring.io/blog/2015/06/17/devtools-in-spring-boot-1-3
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion",
+                       // "org.junit.platform:junit-platform-runner:1.0.0-M4",
+                       // sonst CNFE: org.apache.logging.log4j.jul.LogManager
+                       'org.apache.logging.log4j:log4j-jul',
+                       'org.springframework.boot:spring-boot-starter-test')
+
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion",
+                    // Integrationstests mit Undertow und ALPN fuer HTTP/2
+                    "org.mortbay.jetty.alpn:alpn-boot:$alpnBootVersion")
+
+    junitXmlToHtml "org.apache.ant:ant-junit:$antVersion"
+
+    pmd "net.sourceforge.pmd:pmd-java8:$pmdVersion"
+
+    plantuml "net.sourceforge.plantuml:plantuml:$plantumlVersion"
+
+    // Warning bei SonarQube. Sonst wird aber der Classpath fuer Gradle zu lang
+    // http://stackoverflow.com/questions/34143530/sonar-maven-analysis-class-not-found#answer-34151150
+    // implementation 'org.springframework.security:spring-security-ldap'
+    // implementation "org.openid4java:openid4java:$openid4javaVersion"
+    // implementation 'org.springframework.security:spring-security-openid'
+}
+
+tasks.withType(JavaCompile) {
+    // ab Gradle 3.4: https://blog.gradle.org/incremental-compiler-avoidance
+    options.annotationProcessorPath = configurations.querydsl
+    // ab Gradle 3.4
+    options.incremental = true
+}
+
+// fuer META-INF/additional-spring-configuration-metadata.properties
+compileJava.dependsOn(processResources)
+
+//noinspection GroovyUnusedAssignment
+sourceCompatibility = "$javaVersion"
+//noinspection GroovyUnusedAssignment
+targetCompatibility = "$javaVersion"
+
+processResources {
+    excludes += ['dev']
+}
+
+// https://github.com/ewerk/gradle-plugins/tree/master/querydsl-plugin
+querydsl {
+    library = "com.querydsl:querydsl-apt:$querydslVersion"
+    springDataMongo = true
+    // querydslSourcesDir = 'src/querydsl/java'
+}
+
+compileJava {
+    // '-Xlint:all' ohne processing
+    options.compilerArgs += ['-parameters', '-Xlint:auxiliaryclass,cast,classfile,deprecation,dep-ann,divzero,empty,fallthrough,finally,options,overloads,overrides,path,rawtypes,static,try,unchecked,varargs,-auxiliaryclass,-cast,-classfile,-deprecation,-dep-ann,-divzero,-empty,-fallthrough,-finally,-options,-overloads,-overrides,-path,-processing,-rawtypes,-serial,-static,-try,-unchecked,-varargs', '-Xdiags:verbose']
+    options.encoding = 'UTF-8'
+    // inkrementelle Uebersetzung
+    //options.incremental = true
+}
+compileTestJava {
+    // '-Xlint:all' ohne processing
+    options.compilerArgs += ['-parameters', '-Xlint:auxiliaryclass,cast,classfile,deprecation,dep-ann,divzero,empty,fallthrough,finally,options,overloads,overrides,path,rawtypes,static,try,unchecked,varargs,-auxiliaryclass,-cast,-classfile,-deprecation,-dep-ann,-divzero,-empty,-fallthrough,-finally,-options,-overloads,-overrides,-path,-processing,-rawtypes,-serial,-static,-try,-unchecked,-varargs', '-Xdiags:verbose']
+    options.encoding = 'UTF-8'
+}
+
+jar {
+    baseName = "$archivesBaseName"
+    //noinspection GrReassignedInClosureLocalVar
+    version = null
+}
+
+// http://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-gradle-plugin.html
+springBoot {
+    // layout = 'JAR'
+    layout = 'ZIP'
+
+    // excludeDevtools = false
+}
+
+bootRun {
+    //noinspection GroovyAssignabilityCheck
+    systemProperties System.properties
+
+    // Remote Debugger:   gradle bootRun --debug-jvm
+    // jvmArgs "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
+
+    // addResources = true
+}
+
+assemble.doLast {
+    println ''
+    println 'Aufruf der ausfuehrbaren JAR-Datei:'
+    println "java -Xbootclasspath/p:alpn-boot.jar -jar build/libs/${archivesBaseName}.jar --spring.profiles.active=dev"
+    println ''
+}
+
+// AUSKOMMENTIEREN fuer JUnit 4
+junitPlatform {
+    // platformVersion '1.0'
+    platformVersion "$junitPlatformVersion"
+    filters {
+        engines {
+            include 'junit-jupiter'
+        }
+
+        tags {
+            include 'service', 'repository', 'integration'
+            exclude 'mockenv'
+        }
+        includeClassNamePattern "$includeTests"
+    }
+
+    logManager 'org.apache.logging.log4j.jul.LogManager'
+}
+// HTML-Report zu den JUnit5-Tests mit dem XSLT-Stylesheet von ANT
+// Das Default-Stylesheet zeigt leider nicht die Testklassen von JUnit5 an
+// http://stackoverflow.com/questions/39444908/how-to-create-an-html-report-for-junit-5-tests#answer-39455463
+task junitPlatformHtmlReport {
+    doLast {
+        def reportsDir = new File(buildDir, 'reports/test-reports')
+        reportsDir.mkdirs()
+
+        ant.taskdef(
+            name: 'junitReport',
+            classname: 'org.apache.tools.ant.taskdefs.optional.junit.XMLResultAggregator',
+            classpath: configurations.junitXmlToHtml.asPath
+        )
+
+        ant.mkdir(dir: "$buildDir/test-results/junit-platform")
+        ant.junitReport(todir: "$buildDir/test-results/junit-platform",
+                        tofile: "aggregated-test-results.xml") {
+            fileset(dir: "$buildDir/test-results/junit-platform")
+            //noinspection GroovyAssignabilityCheck
+            report(format: 'frames', todir: reportsDir)
+        }
+    }
+}
+afterEvaluate {
+    def junitPlatformTestTask = tasks.getByName('junitPlatformTest')
+
+    junitPlatformHtmlReport.dependsOn(junitPlatformTestTask)
+    // check.dependsOn(junitPlatformHtmlReport)
+    test.dependsOn(junitPlatformHtmlReport)
+
+    // configure jacoco to analyze the junitPlatformTest task
+    jacoco {
+        toolVersion = "$jacocoVersion"
+        //noinspection GroovyAssignabilityCheck
+        applyTo junitPlatformTestTask
+    }
+
+    // Die Task 'junitPlatformJacocoReport' wird erstellt
+    // http://stackoverflow.com/questions/39362955/gradle-jacoco-and-junit5
+    def junitPlatformJacocoReport = project.task(type: JacocoReport, 'junitPlatformJacocoReport', {
+        sourceDirectories = files('./src/main')
+        classDirectories = files("$buildDir/classes/main")
+        executionData junitPlatformTestTask
+    })
+    test.dependsOn(junitPlatformJacocoReport)
+}
+
+test {
+    include "${includeTestsJUnit4}"
+    minHeapSize '384m'
+    maxHeapSize '1024m'
+
+    // http://stackoverflow.com/questions/3963708/gradle-how-to-display-test-results-in-the-console-in-real-time
+    testLogging {
+        // Optionen fuer den Lifecycle
+        events "passed", "skipped", "failed", "standardOut"
+        showExceptions true
+        exceptionFormat "full"
+        showCauses true
+        showStackTraces true
+
+        // Optionen fuer die Log-Level DEBUG und INFO
+        debug {
+            events "started", "passed", "skipped", "failed", "standardOut", "standardError"
+            exceptionFormat "full"
+        }
+        info.events = debug.events
+        info.exceptionFormat = debug.exceptionFormat
+
+        afterSuite { desc, result ->
+            if (!desc.parent) { // will match the outermost suite
+                def output = "${result.testCount} tests: ${result.successfulTestCount} success, ${result.failedTestCount} failure, ${result.skippedTestCount} skipped"
+                def startItem = '|  ', endItem = '  |'
+                def repeatLength = startItem.length() + output.length() + endItem.length()
+                println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
+            }
+        }
+    }
+}
+
+// Docker erfordert, dass bei Windows 10 Hyper-V aktiviert ist.
+// Dann funktioniert aber der Emulator von Android Studio nicht mehr.
+task docker(type: Exec) {
+    dependsOn assemble
+
+    executable = 'docker'
+    args = ['build', '-t', "$name", '.']
+    // commandLine 'docker.exe', 'build', "-t $name ."
+}
+
+task junitPlatformMkdirs {
+    doLast {
+        def resultsDir = new File(buildDir, '/test-results/junit-platform')
+        resultsDir.mkdirs()
+    }
+}
+
+findbugs {
+    sourceSets = [sourceSets.main, sourceSets.test] as Collection<SourceSet>
+    excludeFilterConfig = resources.text.fromFile("$projectDir/src/main/resources/dev/findbugs.xml")
+    // excludeFilter = file("$projectDir/main/test/resources/dev/findbugs.xml")
+    effort = "max"
+    ignoreFailures = false
+}
+findbugsMain.reports {
+    // FindBugs kann nur *1* Report produzieren
+    xml.enabled = findbugsXml
+    html.enabled = !findbugsXml
+}
+findbugsTest.reports {
+    xml.enabled = findbugsXml
+    html.enabled = !findbugsXml
+}
+
+checkstyle {
+    sourceSets = [sourceSets.main, sourceSets.test] as Collection<SourceSet>
+    toolVersion = "$checkstyleVersion"
+    config = resources.text.fromFile("$projectDir/src/main/resources/dev/checkstyle.xml")
+    // configFile = file("$projectDir/src/main/resources/dev/checkstyle.xml")
+    ignoreFailures = false
+    // ab Gradle 3.4
+    maxWarnings = 0
+}
+checkstyleMain.reports {
+    xml.enabled = true
+    html.enabled = true
+}
+checkstyleTest.reports {
+    xml.enabled = false
+    html.enabled = true
+}
+
+pmd {
+    sourceSets = [sourceSets.main, sourceSets.test] as Collection<SourceSet>
+    // targetJdk = project.targetCompatibility
+    toolVersion = "$pmdVersion"
+    ruleSetConfig = resources.text.fromFile("$projectDir/src/main/resources/dev/pmd.xml")
+}
+
+// http://stackoverflow.com/questions/34143530/sonar-maven-analysis-class-not-found#answer-34151150
+sonarqube {
+    //noinspection GroovyAssignabilityCheck
+    properties {
+        // property 'sonar.tests', 'src/test/java'
+        // property 'sonar.exclusions', 'src/test/resources/rest/*,src/test/resources/truststore.p12'
+        property 'sonar.scm.disabled', true
+    }
+}
+
+// https://github.com/jeremylong/DependencyCheck/blob/master/src/site/markdown/dependency-check-gradle/configuration.md
+// https://github.com/jeremylong/DependencyCheck/issues/360
+dependencyCheck {
+    skipConfigurations = ['apiElements', 'implementation', 'runtimeElements', 'runtimeOnly', 'testImplementation', 'testRuntimeOnly', 'querydslImplementation', 'querydslRuntimeOnly']
+    autoUpdate = "${owaspAutoupdate}"
+    suppressionFile = "$projectDir/src/main/resources/dev/owasp.xml"
+    data {
+        directory = 'C:/Zimmermann/owasp-dependency-check'
+        username = 'dc'
+        password = 'p'
+    }
+    //noinspection GroovyAssignabilityCheck
+    format = 'ALL'
+    // proxy {
+    //     server = System.properties['http.proxyHost']
+    //     port = Integer.getInteger('http.proxyPort')
+    //     username = System.properties['http.proxyUser']
+    //     password = System.properties['http.proxyPassword']
+    // }
+}
+
+// http://randomthoughtsonjavaprogramming.blogspot.de/2012/02/plantuml-and-netbeans.html
+task plantuml {
+    doLast {
+        ant.taskdef(name: 'plantuml',
+                    classname: 'net.sourceforge.plantuml.ant.PlantUmlTask',
+                    classpath: configurations.plantuml.asPath)
+
+        ant.mkdir(dir: "$buildDir/docs/images")
+        ant.plantuml(output: "$buildDir/docs/images",
+                     // graphvizDot: 'C:\\Zimmermann\\Graphviz\\bin\\dot.exe',
+                     verbose: true) {
+            fileset(dir: "$projectDir/src/main/java") {
+                include(name: '**/*.puml')
+            }
+        }
+
+        // PNG-Bilder kopieren fuer PDF-Generierung bei AsciiDoctor
+        ant.mkdir(dir: "$projectDir/src/main/images")
+        ant.copy(todir: "$projectDir/src/main/images") {
+            fileset(dir: "$buildDir/docs/images") {
+                include(name: '*.png')
+            }
+        }
+
+        // Font Icons fuer AsciiDoctor kopieren
+        // ant.mkdir(dir: "$buildDir/docs/icons")
+        // ant.copy(todir: "$buildDir/docs/icons") {
+        //     fileset(dir: "$projectDir/src/main/resources/docs/icons") {
+        //         include(name: '*')
+        //     }
+        // }
+    }
+}
+
+javadoc {
+    dependsOn plantuml
+
+    configure(options) {
+        memberLevel = PRIVATE
+        author = "true"
+        use = "true"
+        bottom = "Copyright &copy; 2016 - ${now()} J&uuml;rgen Zimmermann, Hochschule Karlsruhe - Informatik und Wirtschaftsinformatik. All Rights Reserved."
+    }
+    // http://plantuml.sourceforge.net/qa/?qa=3691/gradles-javadoc-task-stops-working-when-using-plantuml
+    // http://blog.joda.org/2014/02/turning-off-doclint-in-jdk-8-javadoc.html
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
+asciidoctor {
+    sourceDir 'src/main/resources/dev'
+    outputDir "${buildDir}/docs/asciidoc"
+    backends = ['html5']
+    // backends = ['html5', 'pdf']
+    logDocuments true
+    attributes 'source-higlighter': 'coderay',
+               'coderay-linenums-mode': 'table',
+               toc: 'left',
+               // icon: 'font',
+               linkattrs: true,
+               encoding: 'utf-8'
+    // fuer PDF (noch im Alpha-Stadium!): imagesdir relativ zu sourceDir.
+    // Dann funktioniert aber die Referenzierung der Bilder in HTML nicht mehr :-(
+    // https://github.com/asciidoctor/asciidoctor-pdf/issues/271
+    // https://github.com/asciidoctor/asciidoctor-epub3/issues/22
+    // attributes imagesdir: "../../../build/docs/images"
+
+    doLast {
+        println 'Das Entwicklerhandbuch ist in build/docs/asciidoc/html5/entwicklerhandbuch.html'
+    }
+}
+asciidoctor.dependsOn plantuml
+
+// https://github.com/stoicflame/enunciate-gradle
+// https://github.com/stoicflame/enunciate/issues/486
+enunciate {
+    dependsOn plantuml
+
+    // relativ zum Unterverzeichnis "build"
+    buildDirName = 'docs/enunciate'
+    // buildDirName = 'docs/enunciate/docs/docs/docs'
+
+    configFileName = 'src/main/resources/dev/enunciate.xml'
+    sourcepath('src/querydsl/java')
+    include('**/*.java')
+
+    doLast {
+        ant.replace(dir: "$buildDir/docs", token: '../../../../../', value: '../../')
+        println ''
+        println 'Internet-Verbindung notwendig fuer build/docs/enunciate/docs/index.html'
+    }
+}
+
+// http://mrhaki.blogspot.de/2016/05/grails-goodness-change-version-for.html
+// http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-customize-dependency-versions
+task dependencyManagementProperties {
+    doLast {
+        // Properties sortieren und auf der Konsole ausgeben
+        dependencyManagement.importedProperties
+                .toSorted()
+                .each { property -> println property }
+    }
+}
+
+task jenkins(type: JavaExec) {
+    workingDir = "$jenkinsDir"
+    systemProperties = ['JENKINS_HOME': "$jenkinsDir"]
+    main = '-jar'
+    args = [
+        "${jenkinsDir}/jenkins.war",
+        '-server',
+        '--httpsPort=9090',
+        '--httpsListenAddress=127.0.0.1',
+        '--httpsKeyStore=https/keystore.p12',
+        '--httpsKeyStorePassword=zimmermann'
+    ]
+}
+
+task jenkinsstop(type: Exec) {
+    workingDir = "$jenkinsDir"
+    executable = 'C:/Zimmermann/Git/mingw64/bin/curl.exe'
+    args = ['-d', "''", '-u', 'admin:p', '-k', 'https://localhost:9090/exit']
+}
+
+// Alternative zu RESTclient: HTTPie
+task restclient(type: JavaExec) {
+    main = 'org.wiztools.restclient.ui.Main'
+
+    systemProperties = [
+        'javax.net.ssl.trustStore': 'src/test/resources/truststore.p12',
+        'javax.net.ssl.trustStoreType': 'PKCS12',
+        'javax.net.ssl.trustStorePassword': 'zimmermann'
+    ]
+
+    classpath = files(
+        "$restclientDir/restclient-ui-3.6.1.jar",
+        "$restclientDir/restclient-lib-3.6.1.jar",
+        "$restclientDir/filechooser-abstraction-0.1.0.jar",
+        "$restclientDir/jide-oss-3.6.14.jar",
+        "$restclientDir/swingx-autocomplete-1.6.5-1.jar",
+        "$restclientDir/rsyntaxtextarea-2.5.8.jar",
+        "$restclientDir/macify-1.6.jar",
+        "$restclientDir/restclient-server-3.6.1.jar",
+        "$restclientDir/guice-4.0.jar",
+        "$restclientDir/mycila-guice-jsr250-3.6.ga.jar",
+        "$restclientDir/junit-4.12.jar",
+        "$restclientDir/jackson-mapper-asl-1.9.13.jar",
+        "$restclientDir/httpclient-4.5.2.jar",
+        "$restclientDir/httpmime-4.5.2.jar",
+        "$restclientDir/groovy-all-2.4.4.jar",
+        "$restclientDir/jericho-html-3.4.jar",
+        "$restclientDir/app-update-framework-app-update-0.2.1.jar",
+        "$restclientDir/xom-1.2.10.jar",
+        "$restclientDir/swingx-common-1.6.5-1.jar",
+        "$restclientDir/commons-lib-0.4.2.jar",
+        "$restclientDir/jetty-servlet-9.3.2.v20150730.jar",
+        "$restclientDir/javax.inject-1.jar",
+        "$restclientDir/aopalliance-1.0.jar",
+        "$restclientDir/mycila-guice-injection-3.6.ga.jar",
+        "$restclientDir/mycila-guice-closeable-3.6.ga.jar",
+        "$restclientDir/hamcrest-core-1.3.jar",
+        "$restclientDir/jackson-core-asl-1.9.13.jar",
+        "$restclientDir/httpcore-4.4.4.jar",
+        "$restclientDir/commons-logging-1.2.jar",
+        "$restclientDir/commons-codec-1.9.jar",
+        "$restclientDir/javax.json-1.0.4.jar",
+        "$restclientDir/xml-apis-1.3.03.jar",
+        "$restclientDir/jetty-security-9.3.2.v20150730.jar",
+        "$restclientDir/sisu-guice-3.2.3.jar",
+        "$restclientDir/jetty-server-9.3.2.v20150730.jar",
+        "$restclientDir/javax.servlet-api-3.1.0.jar",
+        "$restclientDir/jetty-http-9.3.2.v20150730.jar",
+        "$restclientDir/jetty-io-9.3.2.v20150730.jar",
+        "$restclientDir/jetty-util-9.3.2.v20150730.jar",
+        "$restclientDir/guava-18.0.jar"
+    )
+}
+
+task wrapper(type: Wrapper) {
+    println 'Wrapper: gradleVersion = 3.5-rc-2'
+
+    gradleVersion = '3.5-rc-2'
+    //noinspection UnnecessaryQualifiedReference
+    distributionType = Wrapper.DistributionType.ALL
+    // distributionUrl = 'https://services.gradle.org/distributions/gradle-3.5-rc-2-all.zip'
+}
+
+// Aufruf:   gradlew cleanIdea idea
+// https://docs.gradle.org/current/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html
+idea {
+    module {
+        // downloadSources = true
+        downloadJavadoc = true
+
+        // Generierte Q-Klassen im Verzeichnis 'querydsl' neben 'main'
+        // durch 'com.ewerk.gradle.plugins.querydsl':
+        //noinspection GroovyAccessibility
+        sourceDirs += file('src/querydsl')
+        generatedSourceDirs += file('src/querydsl')
+    }
+}

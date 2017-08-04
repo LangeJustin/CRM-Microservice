@@ -1,0 +1,120 @@
+[
+    {
+        "_class": "de.hska.bestellung.entity.Bestellung",
+        "id": "100000000000000000000001",
+        "datum": [
+            2016,
+            1,
+            1
+        ],
+        "kundeId": "000000000000000000000001",
+        "bestellpositionen": [
+            {
+                "artikelId": "200000000000000000000001",
+                "einzelpreis": 10,
+                "anzahl": 1
+            },
+            {
+                "artikelId": "200000000000000000000002",
+                "einzelpreis": 20,
+                "anzahl": 2
+            }
+        ]
+    },
+    {
+        "_class": "de.hska.bestellung.entity.Bestellung",
+        "id": "100000000000000000000002",
+        "datum": [
+            2016,
+            1,
+            2
+        ],
+        "kundeId": "000000000000000000000001",
+        "bestellpositionen": [
+            {
+                "artikelId": "200000000000000000000003",
+                "einzelpreis": 30,
+                "anzahl": 3
+            },
+            {
+                "artikelId": "200000000000000000000004",
+                "einzelpreis": 40,
+                "anzahl": 4
+            }
+        ]
+    },
+    {
+        "_class": "de.hska.bestellung.entity.Bestellung",
+        "id": "100000000000000000000003",
+        "datum": [
+            2016,
+            1,
+            3
+        ],
+        "kundeId": "000000000000000000000001",
+        "bestellpositionen": [
+            {
+                "artikelId": "200000000000000000000005",
+                "einzelpreis": 50,
+                "anzahl": 5
+            },
+            {
+                "artikelId": "200000000000000000000006",
+                "einzelpreis": 60,
+                "anzahl": 6
+            }
+      ]
+
+    },
+    {
+        "_class": "de.hska.bestellung.entity.Bestellung",
+        "id": "100000000000000000000004",
+        "datum": [
+            2016,
+            1,
+            4
+        ],
+        "kundeId": "000000000000000000000002",
+        "bestellpositionen": [
+            {
+                "artikelId": "200000000000000000000001",
+                "einzelpreis": 10,
+                "anzahl": 1
+            }
+        ]
+    },
+    {
+        "_class": "de.hska.bestellung.entity.Bestellung",
+        "id": "100000000000000000000005",
+        "datum": [
+            2016,
+            1,
+            5
+        ],
+        "kundeId": "000000000000000000000004",
+        "bestellpositionen": [
+            {
+                "artikelId": "200000000000000000000001",
+                "einzelpreis": 10,
+                "anzahl": 1
+            }
+        ]
+    },
+    {
+        "_class": "de.hska.bestellung.entity.Bestellung",
+        "id": "100000000000000000000010",
+        "datum": [
+            2016,
+            1,
+            31
+        ],
+        "kundeId": "FFFFFFFFFFFFFFFFFFFFFFFF",
+        "bestellpositionen": [
+            {
+                "artikelId": "200000000000000000000002",
+                "einzelpreis": 20,
+                "anzahl": 2
+            }
+        ]
+    }
+]

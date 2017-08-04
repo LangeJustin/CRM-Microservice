@@ -1,0 +1,40 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam componentStyle uml2
+
+package org.springframework.mail.javamail {
+    interface JavaMailSender {
+    }
+}
+
+package de.hska {
+    package kunde {
+        package entity {
+            class Kunde << entity >> {
+            }
+        }
+
+        package service #DDDDDD {
+            NeuerKundeEvent -down-> "1" Kunde
+            KundeListener ..> NeuerKundeEvent
+            KundeListener -down-> "1" JavaMailSender
+
+            class NeuerKundeEvent {
+            }
+
+            class KundeListener << control >> << @Service >> {
+                - @Value from : String
+                - @Value sales : String
+                ~ @EventListener onSave(event: NeuerKundeEvent)
+            }
+        }
+    }
+}
+
+hide empty members
+hide empty methods
+hide empty fields
+
+footer (c) Juergen Zimmermann
+
+@enduml

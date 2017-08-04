@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<!--
+
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!--suppress XmlUnboundNsPrefix -->
+<enunciate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="http://enunciate.webcohesion.com/schemas/enunciate-2.8.0.xsd"
+           version="1.0">
+
+    <!-- https://github.com/stoicflame/enunciate/wiki/User-Guide -->
+
+    <title>REST API</title>
+    <description>&#220;bungsprojekt im Studiengang Wirtschaftsinformatik</description>
+    <terms>GNU General Public License, Version 3.0</terms>
+    <copyright>&#184; J&#252;rgen Zimmermann</copyright>
+
+    <!-- https://github.com/stoicflame/enunciate/wiki/Modules -->
+    <modules>
+        <jaxb disabled="true"/>
+        <jackson1 disabled="true"/>
+        <jaxws disabled="true"/>
+
+        <c-xml-client disabled="true"/>
+        <csharp-xml-client disabled="true"/>
+        <java-xml-client disabled="true"/>
+        <javascript-client disabled="true"/>
+        <gwt-json-overlay disabled="true"/>
+        <obj-c-xml-client disabled="true"/>
+        <php-xml-client disabled="true"/>
+        <php-json-client disabled="true"/>
+        <ruby-json-client disabled="true"/>
+        <idl disabled="true"/>
+        <swagger disabled="true"/>
+    </modules>
+</enunciate>

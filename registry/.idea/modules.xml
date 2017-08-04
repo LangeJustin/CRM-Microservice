@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/registry.iml" filepath="$PROJECT_DIR$/.idea/modules/registry.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/registry_main.iml" filepath="$PROJECT_DIR$/.idea/modules/registry_main.iml" group="registry" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/registry_test.iml" filepath="$PROJECT_DIR$/.idea/modules/registry_test.iml" group="registry" />
+    </modules>
+  </component>
+</project>

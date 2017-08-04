@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.logging.log4j:log4j-slf4j-impl:2.8.1">
+    <CLASSES>
+      <root url="jar://C:/Z/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j-impl/2.8.1/709b07000087f3a0dec1bc4b5e05281499588cae/log4j-slf4j-impl-2.8.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://C:/Z/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j-impl/2.8.1/65366cb01e7771426d948bbbd5af60571f7b8a77/log4j-slf4j-impl-2.8.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://C:/Z/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j-impl/2.8.1/e1c7803a38c938b78dacee4500c1dada62f2410b/log4j-slf4j-impl-2.8.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

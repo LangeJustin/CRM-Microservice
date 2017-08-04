@@ -1,0 +1,50 @@
+New Project
+    Gradle
+        ggf. [Project SDK] New
+            "C:\Zimmermann\Java\jdk"
+
+GroupId     de.hska
+ArtifactId  kunden
+Version     1.0
+
+Beispiel 0 kopieren
+    build.gradle oeffnen
+        "You can configure Gradle wrapper to use distribution with sources ..."
+            "OK, apply suggestion!" anklicken
+
+Beispiel 1, 2, oder 3 kopieren
+    build.gradle oeffnen
+        "You can configure Gradle wrapper to use distribution with sources ..."
+            "OK, apply suggestion!" anklicken
+
+Icon "Project Structure" (rechte obere Ecke)
+    Modules
+        kunden
+            kunden_main
+                +
+                    Module Dependency
+                        kunden_querydsl
+            kunden_querydsl
+                +
+                    Module Dependency
+                        kunden_main
+                    Library
+                        Gradle: com.querydsl:querydsl-core:VERSION
+                        Gradle: org.mongodb:bson:VERSION
+                        Gradle: org.springframework.hateoas:spring-hateoas:VERSION
+                        Gradle: org.springframework.security:spring-security-core:VERSION
+    Facets
+        +
+            Spring
+                kunden_main
+                + (rechtes Teilfenster mit "Microservice")
+                    Parent context:   Microservice
+                    kunden_main:      Haken setzen
+
+Icon "Edit Configurations" (rechte obere Ecke)
+    Defaults
+        Spring Boot
+            Active Profiles:   dev
+
+Terminal
+    gradle compileTestJava

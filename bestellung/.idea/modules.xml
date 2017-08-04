@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bestellung.iml" filepath="$PROJECT_DIR$/.idea/modules/bestellung.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bestellung_main.iml" filepath="$PROJECT_DIR$/.idea/modules/bestellung_main.iml" group="bestellung" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bestellung_querydsl.iml" filepath="$PROJECT_DIR$/.idea/modules/bestellung_querydsl.iml" group="bestellung" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bestellung_test.iml" filepath="$PROJECT_DIR$/.idea/modules/bestellung_test.iml" group="bestellung" />
+    </modules>
+  </component>
+</project>

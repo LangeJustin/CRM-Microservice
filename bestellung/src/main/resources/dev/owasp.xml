@@ -1,0 +1,251 @@
+<?xml version="1.0"?>
+
+<!--
+
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
+    <!-- Spring Cloud -->
+    <suppress>
+        <notes><![CDATA[file name: spring-cloud-commons-1.2.0.RELEASE.jar]]></notes>
+        <gav regex="true">^org\.springframework\.cloud:spring-cloud-commons:.*$</gav>
+        <cve>CVE-2016-9878</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: spring-cloud-config-client-1.3.0.RELEASE.jar]]></notes>
+        <gav regex="true">^org\.springframework\.cloud:spring-cloud-config-client:.*$</gav>
+        <cve>CVE-2016-9878</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: spring-cloud-context-1.2.0.RELEASE.jar]]></notes>
+        <gav regex="true">^org\.springframework\.cloud:spring-cloud-context:.*$</gav>
+        <cve>CVE-2016-9878</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: spring-cloud-netflix-core-1.3.0.RELEASE.jar]]></notes>
+        <gav regex="true">^org\.springframework\.cloud:spring-cloud-netflix-core:.*$</gav>
+        <cve>CVE-2016-9878</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: spring-cloud-netflix-eureka-client-1.3.0.RELEASE.jar]]></notes>
+        <gav regex="true">^org\.springframework\.cloud:spring-cloud-netflix-eureka-client:.*$</gav>
+        <cve>CVE-2016-9878</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: spring-cloud-starter-archaius-1.3.0.RELEASE.jar]]></notes>
+        <gav regex="true">^org\.springframework\.cloud:spring-cloud-starter-archaius:.*$</gav>
+        <cve>CVE-2016-9878</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: spring-cloud-starter-config-1.3.0.RELEASE.jar]]></notes>
+        <gav regex="true">^org\.springframework\.cloud:spring-cloud-starter-config:.*$</gav>
+        <cve>CVE-2016-9878</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: spring-cloud-starter-eureka-1.3.0.RELEASE.jar]]></notes>
+        <gav regex="true">^org\.springframework\.cloud:spring-cloud-starter-eureka:.*$</gav>
+        <cve>CVE-2016-9878</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: spring-cloud-starter-feign-1.3.0.RELEASE.jar]]></notes>
+        <gav regex="true">^org\.springframework\.cloud:spring-cloud-starter-feign:.*$</gav>
+        <cve>CVE-2016-9878</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: spring-cloud-starter-hystrix-1.3.0.RELEASE.jar]]></notes>
+        <gav regex="true">^org\.springframework\.cloud:spring-cloud-starter-hystrix:.*$</gav>
+        <cve>CVE-2016-9878</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: spring-cloud-starter-ribbon-1.3.0.RELEASE.jar]]></notes>
+        <gav regex="true">^org\.springframework\.cloud:spring-cloud-starter-ribbon:.*$</gav>
+        <cve>CVE-2016-9878</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: spring-cloud-starter-1.2.0.RELEASE.jar]]></notes>
+        <gav regex="true">^org\.springframework\.cloud:spring-cloud-starter:.*$</gav>
+        <cve>CVE-2016-9878</cve>
+    </suppress>
+
+    <!-- MongoDB und QueryDSL -->
+    <suppress>
+        <notes><![CDATA[file name: spring-boot-starter-data-mongodb-1.5.2.RELEASE.jar]]></notes>
+        <gav regex="true">^org\.springframework\.boot:spring-boot-starter-data-mongodb:.*$</gav>
+        <cpe>cpe:/a:mongodb:mongodb</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: bson-3.4.2.jar]]></notes>
+        <sha1>8455e0c6926ff2bf444325ea46fd8b74adaf0362</sha1>
+        <cve>CVE-2016-6494</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: mongodb-driver-async-3.4.2.jar]]></notes>
+        <sha1>464cd768ce3e83536d11cfc1f51bf0c6ef0965cc</sha1>
+        <cve>CVE-2016-6494</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: mongodb-driver-core-3.4.2.jar]]></notes>
+        <sha1>d0a18b4e46fe79467a71d7f9f1bc5932de670829</sha1>
+        <cve>CVE-2016-6494</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: mongodb-driver-3.4.2.jar]]></notes>
+        <sha1>d565cc4db7fd756973b1500424577a503d17f48a</sha1>
+        <cve>CVE-2016-6494</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: querydsl-mongodb-4.1.4.jar]]></notes>
+        <gav regex="true">^com\.querydsl:querydsl-mongodb:.*$</gav>
+        <cve>CVE-2016-6494</cve>
+    </suppress>
+
+    <!-- Jackson -->
+    <suppress>
+        <notes><![CDATA[file name: jackson-annotations-2.9.0.pr3.jar]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-annotations:.*$</gav>
+        <cve>CVE-2016-7051</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: jackson-core-2.9.0.pr3.jar]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-core:.*$</gav>
+        <cve>CVE-2016-7051</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: jackson-databind-2.9.0.pr3.jar]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2016-7051</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: jackson-dataformat-yaml-2.9.0.pr3.jar]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.dataformat:jackson-dataformat-yaml:.*$</gav>
+        <cve>CVE-2016-7051</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: jackson-datatype-jsr310-2.9.0.pr3.jar]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.datatype:jackson-datatype-jsr310:.*$</gav>
+        <cve>CVE-2016-7051</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: jackson-module-afterburner-2.9.0.pr3.jar]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.module:jackson-module-afterburner:.*$</gav>
+        <cve>CVE-2016-7051</cve>
+    </suppress>
+
+    <!-- JavaMail -->
+    <suppress>
+        <notes><![CDATA[file name: javax.mail-1.5.6.jar]]></notes>
+        <sha1>ab5daef2f881c42c8e280cbe918ec4d7fdfd7efe</sha1>
+        <cpe>cpe:/a:sun:javamail:1.5.6</cpe>
+    </suppress>
+
+    <!-- Netty -->
+    <suppress>
+        <notes><![CDATA[file name: netty-buffer-4.0.27.Final.jar]]></notes>
+        <gav regex="true">^io\.netty:netty-buffer:.*$</gav>
+        <cve>CVE-2016-4970</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: netty-codec-http-4.0.27.Final.jar]]></notes>
+        <gav regex="true">^io\.netty:netty-codec-http:.*$</gav>
+        <cve>CVE-2016-4970</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: netty-codec-4.0.27.Final.jar]]></notes>
+        <gav regex="true">^io\.netty:netty-codec:.*$</gav>
+        <cve>CVE-2016-4970</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: netty-common-4.0.27.Final.jar]]></notes>
+        <gav regex="true">^io\.netty:netty-common:.*$</gav>
+        <cve>CVE-2016-4970</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: netty-handler-4.0.27.Final.jar]]></notes>
+        <gav regex="true">^io\.netty:netty-handler:.*$</gav>
+        <cve>CVE-2016-4970</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: netty-transport-native-epoll-4.0.27.Final.jar]]></notes>
+        <gav regex="true">^io\.netty:netty-transport-native-epoll:.*$</gav>
+        <cve>CVE-2016-4970</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: netty-transport-4.0.27.Final.jar]]></notes>
+        <gav regex="true">^io\.netty:netty-transport:.*$</gav>
+        <cve>CVE-2016-4970</cve>
+    </suppress>
+
+    <!-- spring-boot-configuration-processor -->
+    <suppress>
+        <notes><![CDATA[file name: android-json-0.0.20131108.vaadin1.jar]]></notes>
+        <sha1>fa26d351fe62a6a17f5cda1287c1c6110dec413f</sha1>
+        <cpe>cpe:/a:google:android</cpe>
+    </suppress>
+
+    <!-- FindBugs -->
+    <suppress>
+        <notes><![CDATA[file name: AppleJavaExtensions-1.4.jar]]></notes>
+        <sha1>c586cd0b44cae8c0239a977277f99d08d751a482</sha1>
+        <cpe>cpe:/a:apple:java:1.4</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: AppleJavaExtensions-1.4.jar]]></notes>
+        <sha1>c586cd0b44cae8c0239a977277f99d08d751a482</sha1>
+        <cpe>cpe:/a:apple:java_1.4:1.4</cpe>
+    </suppress>
+
+    <!-- AsciiDoctor -->
+    <suppress>
+        <notes><![CDATA[file name: groovy-all-2.4.11.jar]]></notes>
+        <gav regex="true">^org\.codehaus\.groovy:groovy-all:.*$</gav>
+        <cve>CVE-2016-6497</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: asciidoctorj-1.5.3.2.jar: jruby_cache_backend.jar]]></notes>
+        <sha1>7ca7a3afc9b4f88337c200cba1088e5f91848293</sha1>
+        <cpe>cpe:/a:jruby:jruby:-</cpe>
+     </suppress>
+    <suppress>
+        <notes><![CDATA[file name: jruby-complete-1.7.21.jar]]></notes>
+        <sha1>e061b9f399a5e8d5cfcca84d4a6baf879111e83c</sha1>
+        <cpe>cpe:/a:jruby:jruby:1.7.21</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: jruby-complete-1.7.21.jar: jopenssl.jar]]></notes>
+        <sha1>90913bae2d57570037c11e2284139d47031b0a6f</sha1>
+        <cpe>cpe:/a:openssl:openssl:0.9.7</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: jruby-complete-1.7.21.jar: jopenssl.jar]]></notes>
+        <sha1>90913bae2d57570037c11e2284139d47031b0a6f</sha1>
+        <cpe>cpe:/a:jruby:jruby:0.9.7</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: jruby-complete-1.7.21.jar: readline.jar]]></notes>
+        <sha1>322c0036d59eca1982ed22f478d5fed1375b2711</sha1>
+        <cpe>cpe:/a:jruby:jruby:1.0</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: jruby-complete-1.7.21.jar: ripper.jar]]></notes>
+        <sha1>608996733226690fa74680dad5dda79eada1c22b</sha1>
+        <cpe>cpe:/a:jruby:jruby:1.7.21</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[file name: jruby-complete-1.7.21.jar: bcprov-jdk15on-1.50.jar]]></notes>
+        <gav regex="true">^org\.bouncycastle:bcprov-jdk15on:.*$</gav>
+        <cve>CVE-2015-7940</cve>
+    </suppress>
+</suppressions>

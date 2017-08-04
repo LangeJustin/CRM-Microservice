@@ -1,0 +1,22 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam componentStyle uml2
+
+package de.hska.kunde.service {
+    KundeScheduler -down-> "1" KundeRepository
+
+    interface KundeRepository {
+    }
+
+    class KundeScheduler << control >> << @Service >> {
+        ~ @Scheduled everyMinute()
+    }
+}
+
+hide empty members
+hide empty methods
+hide empty fields
+
+footer (c) Juergen Zimmermann
+
+@enduml

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: org.wildfly.client:wildfly-client-config:1.0.0.Beta4">
+    <CLASSES>
+      <root url="jar://C:/Z/caches/modules-2/files-2.1/org.wildfly.client/wildfly-client-config/1.0.0.Beta4/7a58e7fa28b231ececa91cd3494df54567db3241/wildfly-client-config-1.0.0.Beta4.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://C:/Z/caches/modules-2/files-2.1/org.wildfly.client/wildfly-client-config/1.0.0.Beta4/7320bc4337dd09a9ca5eb9ae8a8abac3b31a82a5/wildfly-client-config-1.0.0.Beta4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://C:/Z/caches/modules-2/files-2.1/org.wildfly.client/wildfly-client-config/1.0.0.Beta4/5d1d051f5446378270b26102b59839e845d237dd/wildfly-client-config-1.0.0.Beta4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
