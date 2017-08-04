@@ -1,29 +1,3 @@
-### **shopKunde**
-
-![shopKunde](C:\Users\Justin\IdeaProjects\Kundenverwaltung -Microservices\modellierung\shopKunde.PNG)
-
-
-
-### KundeController
-
-![kundeController](C:\Users\Justin\IdeaProjects\Kundenverwaltung -Microservices\modellierung\kundeController.PNG)
-
-
-
-### KundeService![kundeService](C:\Users\Justin\IdeaProjects\Kundenverwaltung -Microservices\modellierung\kundeService.PNG)
-
-
-
-### KundeResource
-
-![kundeResource](C:\Users\Justin\IdeaProjects\Kundenverwaltung -Microservices\modellierung\kundeResource.PNG)
-
-### Benutzerpolicy (Use-Case-Diagramm)
-
-![benutzerPolicy](C:\Users\Justin\IdeaProjects\Kundenverwaltung -Microservices\modellierung\benutzerPolicy.PNG)
-
-
-
 ## Vorbereitung für den Start der Server
 
 ### Internet-Verbindung
