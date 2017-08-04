@@ -1,24 +1,24 @@
 ### **shopKunde**
 
-
+![shopKunde](https://github.com/LangeJustin/KundenverwaltungMicroservice/blob/master/modellierung/shopKunde.PNG)
 
 ### KundeController
 
-![kundeController](https://github.com/LangeJustin/KundenverwaltungMicroservice/blob/master/modellierung/shopKunde.PNG)
+![kundeController](https://github.com/LangeJustin/KundenverwaltungMicroservice/blob/master/modellierung/kundeController.PNG)
 
 
 
-### KundeService![kundeService](C:\Users\Justin\IdeaProjects\Kundenverwaltung -Microservices\modellierung\kundeService.PNG)
+### KundeService
 
-
+![KundeService](https://github.com/LangeJustin/KundenverwaltungMicroservice/blob/master/modellierung/kundeService.PNG)
 
 ### KundeResource
 
-![kundeResource](C:\Users\Justin\IdeaProjects\Kundenverwaltung -Microservices\modellierung\kundeResource.PNG)
+![kundeResource](https://github.com/LangeJustin/KundenverwaltungMicroservice/blob/master/modellierung/kundeResource.PNG)
 
 ### Benutzerpolicy (Use-Case-Diagramm)
 
-![benutzerPolicy](C:\Users\Justin\IdeaProjects\Kundenverwaltung -Microservices\modellierung\benutzerPolicy.PNG)
+![benutzerPolicy](https://github.com/LangeJustin/KundenverwaltungMicroservice/blob/master/modellierung/benutzerPolicy.PNG)
 
 
 
